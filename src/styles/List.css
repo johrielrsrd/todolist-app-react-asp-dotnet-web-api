@@ -1,0 +1,9 @@
+.list-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.text-item {
+  width: 200px;
+}
