@@ -30,7 +30,6 @@ function List(props) {
         className="delete-button"
         onClick={() => {
           props.onDelete(props.id);
-          window.location.reload();
         }}
       >
         DELETE
