@@ -11,11 +11,16 @@ function App() {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const totalPages = Math.ceil(toDoItem.length / itemsPerPage);
+  const [totalPages, setTotalPages] = useState(
+    Math.ceil(toDoItem.length / itemsPerPage)
+  );
 
   useEffect(() => {
     getAllToDoItems();
-  }, [currentPage]);
+    setTotalPages(Math.ceil(toDoItem.length / itemsPerPage));
+    if (totalPages != 0 && currentPage > totalPages)
+      setCurrentPage(currentPage - 1);
+  }, [currentPage, toDoItem.length, totalPages]);
 
   function getAllToDoItems() {
     fetch("https://localhost:7010/api/ToDo").then((response) =>
@@ -104,7 +109,9 @@ function App() {
             setCurrentPage(currentPage + 1);
             getAllToDoItems();
           }}
-          disabled={currentPage === totalPages ? true : false}
+          disabled={
+            currentPage === totalPages || toDoItem.length === 0 ? true : false
+          }
         >
           Next
         </button>
