@@ -14,13 +14,14 @@ function InputBox(props) {
         }}
       >
         <input
+          className="input-box"
           type="text"
-          placeholder="Please enter a task."
+          placeholder="Text input."
           value={newToDo}
           onChange={(e) => setToDo(e.target.value)}
           required
         />
-        <button>ADD</button>
+        <button className="add-button-input">ADD</button>
       </form>
     </div>
   );

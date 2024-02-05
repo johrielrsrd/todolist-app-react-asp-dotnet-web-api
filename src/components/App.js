@@ -10,8 +10,7 @@ function App() {
   useEffect(() => {
     fetch("https://localhost:7010/api/ToDo").then((response) =>
       response.json().then((json) => {
-        setToDoItem(json);
-        console.log(json);
+        setToDoItem(json.slice(0, 5));
       })
     );
   }, []);
@@ -20,32 +19,37 @@ function App() {
     const postOptions = {
       method: "POST",
       headers: {
-        "Content-Type": "application/json",
+        "Content-Type": "application/json"
       },
-      body: JSON.stringify({ text: `${newToDoItem}`, isComplete: false }),
+      body: JSON.stringify({ text: `${newToDoItem}`, isComplete: false })
     };
 
-    fetch("https://localhost:7010/api/ToDo", postOptions)
-      .then((response) => response.json())
-      .then((json) => console.log(json));
+    fetch("https://localhost:7010/api/ToDo", postOptions);
   }
 
   function deleteToDoItem(ToDoItemId) {
     const deleteOptions = {
       method: "DELETE",
       headers: {
-        "Content-Type": "application/json",
-      },
+        "Content-Type": "application/json"
+      }
     };
 
-    fetch(`https://localhost:7010/api/ToDo/${ToDoItemId}`, deleteOptions)
-      .then((response) => {
-        if (!response.ok) {
-          throw new Error(`HTTP error! Status: ${response.status}`);
-        }
-        console.log("TodoItem deleted successfully");
+    fetch(`https://localhost:7010/api/ToDo/${ToDoItemId}`, deleteOptions);
+  }
+
+  function updateToDoItem(itemId, itemText, itemCondition) {
+    const putOptions = {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        id: itemId,
+        text: `${itemText}`,
+        isComplete: itemCondition
       })
-      .catch((error) => console.error("Error deleting TodoItem:", error));
+    };
+
+    fetch(`https://localhost:7010/api/ToDo/${itemId}`, putOptions);
   }
 
   return (
@@ -53,13 +57,14 @@ function App() {
       <Header />
       <InputBox onAdd={addNewToDoItem} />
 
-      {toDoItem.map((listItem) => (
+      {toDoItem.map((listItem, indexValue) => (
         <List
-          key={listItem.id}
+          key={indexValue}
           id={listItem.id}
           text={listItem.text}
           condition={listItem.isComplete}
           onDelete={deleteToDoItem}
+          onUpdate={updateToDoItem}
         />
       ))}
     </div>
