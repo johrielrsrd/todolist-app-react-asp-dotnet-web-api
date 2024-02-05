@@ -5,15 +5,24 @@ import Header from "./Header";
 import InputBox from "./InputBox";
 
 function App() {
+  const [currentPage, setCurrentPage] = useState(1);
   const [toDoItem, setToDoItem] = useState([]);
 
+  const itemsPerPage = 5;
+  const startIndex = (currentPage - 1) * itemsPerPage;
+  const endIndex = startIndex + itemsPerPage;
+
   useEffect(() => {
+    getAllToDoItems();
+  }, [currentPage]);
+
+  function getAllToDoItems() {
     fetch("https://localhost:7010/api/ToDo").then((response) =>
       response.json().then((json) => {
-        setToDoItem(json.slice(0, 5));
+        setToDoItem(json);
       })
     );
-  }, []);
+  }
 
   function addNewToDoItem(newToDoItem) {
     const postOptions = {
@@ -52,14 +61,22 @@ function App() {
     fetch(`https://localhost:7010/api/ToDo/${itemId}`, putOptions);
   }
 
+  function nextPage() {
+    setCurrentPage(currentPage + 1);
+  }
+
+  function prevPage() {
+    setCurrentPage(currentPage - 1);
+  }
+
   return (
     <div className="app-container">
       <Header />
-      <InputBox onAdd={addNewToDoItem} />
+      <InputBox onAdd={addNewToDoItem} reRender={getAllToDoItems} />
 
-      {toDoItem.map((listItem, indexValue) => (
+      {toDoItem.slice(startIndex, endIndex).map((listItem) => (
         <List
-          key={indexValue}
+          key={listItem.id}
           id={listItem.id}
           text={listItem.text}
           condition={listItem.isComplete}
@@ -67,6 +84,28 @@ function App() {
           onUpdate={updateToDoItem}
         />
       ))}
+
+      <button
+        className="prev-button"
+        onClick={() => {
+          getAllToDoItems();
+          prevPage();
+        }}
+        disabled={currentPage <= 1 ? true : false}
+      >
+        Previous
+      </button>
+
+      <button
+        className="next-button"
+        onClick={() => {
+          nextPage();
+          getAllToDoItems();
+        }}
+      >
+        Next
+      </button>
+      <label>Page {currentPage}</label>
     </div>
   );
 }

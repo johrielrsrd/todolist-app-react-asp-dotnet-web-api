@@ -1,16 +1,21 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import "../styles/InputBox.css";
 
 function InputBox(props) {
   const [newToDo, setToDo] = useState("");
 
+  useEffect(() => {
+    props.reRender();
+  }, [props]);
+
   return (
     <div className="input-box-container">
       <form
         className="form-container"
-        onSubmit={() => {
+        onSubmit={(event) => {
           props.onAdd(newToDo);
           setToDo("");
+          event.preventDefault();
         }}
       >
         <input
