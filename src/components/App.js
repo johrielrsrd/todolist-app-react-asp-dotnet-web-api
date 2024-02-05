@@ -11,10 +11,18 @@ function App() {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
+  const [totalPages, setTotalPages] = useState(
+    Math.ceil(toDoItem.length / itemsPerPage)
+  );
 
   useEffect(() => {
     getAllToDoItems();
   }, [currentPage]);
+
+  useEffect(() => {
+    setTotalPages(Math.ceil(toDoItem.length / itemsPerPage));
+    setCurrentPage(totalPages);
+  }, [toDoItem.length, totalPages]);
 
   function getAllToDoItems() {
     fetch("https://localhost:7010/api/ToDo").then((response) =>
@@ -61,14 +69,6 @@ function App() {
     fetch(`https://localhost:7010/api/ToDo/${itemId}`, putOptions);
   }
 
-  function nextPage() {
-    setCurrentPage(currentPage + 1);
-  }
-
-  function prevPage() {
-    setCurrentPage(currentPage - 1);
-  }
-
   return (
     <div className="app-container">
       <Header />
@@ -85,27 +85,38 @@ function App() {
         />
       ))}
 
-      <button
-        className="prev-button"
-        onClick={() => {
-          getAllToDoItems();
-          prevPage();
-        }}
-        disabled={currentPage <= 1 ? true : false}
-      >
-        Previous
-      </button>
-
-      <button
-        className="next-button"
-        onClick={() => {
-          nextPage();
-          getAllToDoItems();
-        }}
-      >
-        Next
-      </button>
-      <label>Page {currentPage}</label>
+      <div className="page-button-container">
+        <button
+          className="prev-button"
+          onClick={() => {
+            setCurrentPage(currentPage - 1);
+            getAllToDoItems();
+          }}
+          disabled={currentPage <= 1 ? true : false}
+        >
+          Previous
+        </button>
+        {Array.from({ length: totalPages }).map((_, index) => (
+          <button
+            key={index}
+            onClick={() => setCurrentPage(index + 1)}
+            disabled={currentPage === index + 1}
+          >
+            {index + 1}
+          </button>
+        ))}
+        <button
+          className="next-button"
+          onClick={() => {
+            setCurrentPage(currentPage + 1);
+            getAllToDoItems();
+          }}
+          disabled={currentPage === totalPages ? true : false}
+        >
+          Next
+        </button>
+        <label>Page {currentPage}</label>
+      </div>
     </div>
   );
 }
