@@ -83,40 +83,43 @@ function App() {
           />
         ))}
       </div>
-      <div className="page-button-container">
-        <button
-          className="prev-button"
-          onClick={() => {
-            setCurrentPage(currentPage - 1);
-            getAllToDoItems();
-          }}
-          disabled={currentPage <= 1 ? true : false}
-        >
-          Previous
-        </button>
-        {Array.from({ length: totalPages }).map((_, index) => (
+      {/*Page Buttons*/}
+      {toDoItem.length !== 0 ? (
+        <div className="page-button-container">
           <button
-            key={index}
-            onClick={() => setCurrentPage(index + 1)}
-            disabled={currentPage === index + 1}
+            className="prev-button"
+            onClick={() => {
+              setCurrentPage(currentPage - 1);
+              getAllToDoItems();
+            }}
+            disabled={currentPage <= 1 ? true : false}
           >
-            {index + 1}
+            Previous
           </button>
-        ))}
-        <button
-          className="next-button"
-          onClick={() => {
-            setCurrentPage(currentPage + 1);
-            getAllToDoItems();
-          }}
-          disabled={
-            currentPage === totalPages || toDoItem.length === 0 ? true : false
-          }
-        >
-          Next
-        </button>
-        <label>Page {currentPage}</label>
-      </div>
+          {Array.from({ length: totalPages }).map((_, index) => (
+            <button
+              key={index}
+              onClick={() => setCurrentPage(index + 1)}
+              disabled={currentPage === index + 1}
+            >
+              {index + 1}
+            </button>
+          ))}
+          <button
+            className="next-button"
+            onClick={() => {
+              setCurrentPage(currentPage + 1);
+              getAllToDoItems();
+            }}
+            disabled={
+              currentPage === totalPages || toDoItem.length === 0 ? true : false
+            }
+          >
+            Next
+          </button>
+          <label>Page {currentPage}</label>
+        </div>
+      ) : null}
     </div>
   );
 }
