@@ -10,7 +10,7 @@ function List(props) {
   }
 
   return (
-    <div className="list-container">
+    <div className="list-item-container">
       <input
         id="checkbox-input"
         type="checkbox"

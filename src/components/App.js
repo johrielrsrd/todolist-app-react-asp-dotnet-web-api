@@ -11,18 +11,11 @@ function App() {
   const itemsPerPage = 5;
   const startIndex = (currentPage - 1) * itemsPerPage;
   const endIndex = startIndex + itemsPerPage;
-  const [totalPages, setTotalPages] = useState(
-    Math.ceil(toDoItem.length / itemsPerPage)
-  );
+  const totalPages = Math.ceil(toDoItem.length / itemsPerPage);
 
   useEffect(() => {
     getAllToDoItems();
   }, [currentPage]);
-
-  useEffect(() => {
-    setTotalPages(Math.ceil(toDoItem.length / itemsPerPage));
-    setCurrentPage(totalPages);
-  }, [toDoItem.length, totalPages]);
 
   function getAllToDoItems() {
     fetch("https://localhost:7010/api/ToDo").then((response) =>
@@ -73,18 +66,18 @@ function App() {
     <div className="app-container">
       <Header />
       <InputBox onAdd={addNewToDoItem} reRender={getAllToDoItems} />
-
-      {toDoItem.slice(startIndex, endIndex).map((listItem) => (
-        <List
-          key={listItem.id}
-          id={listItem.id}
-          text={listItem.text}
-          condition={listItem.isComplete}
-          onDelete={deleteToDoItem}
-          onUpdate={updateToDoItem}
-        />
-      ))}
-
+      <div className="list-container">
+        {toDoItem.slice(startIndex, endIndex).map((listItem) => (
+          <List
+            key={listItem.id}
+            id={listItem.id}
+            text={listItem.text}
+            condition={listItem.isComplete}
+            onDelete={deleteToDoItem}
+            onUpdate={updateToDoItem}
+          />
+        ))}
+      </div>
       <div className="page-button-container">
         <button
           className="prev-button"
