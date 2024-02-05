@@ -3,6 +3,7 @@ import "../styles/App.css";
 import List from "./List";
 import Header from "./Header";
 import InputBox from "./InputBox";
+import Footer from "./Footer";
 
 function App() {
   const [currentPage, setCurrentPage] = useState(1);
@@ -18,7 +19,7 @@ function App() {
   useEffect(() => {
     getAllToDoItems();
     setTotalPages(Math.ceil(toDoItem.length / itemsPerPage));
-    if (totalPages != 0 && currentPage > totalPages)
+    if (totalPages !== 0 && currentPage > totalPages)
       setCurrentPage(currentPage - 1);
   }, [currentPage, toDoItem.length, totalPages]);
 
@@ -120,6 +121,7 @@ function App() {
           <label>Page {currentPage}</label>
         </div>
       ) : null}
+      <Footer />
     </div>
   );
 }
