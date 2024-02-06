@@ -1,0 +1,10 @@
+#log-in-form {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+}
+
+#log-in-form input {
+  margin: 5px;
+}
