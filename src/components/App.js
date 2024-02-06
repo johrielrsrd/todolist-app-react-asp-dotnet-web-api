@@ -76,8 +76,7 @@ function App(props) {
 
   return (
     <div className="app-container">
-      <Header />
-      <h2>Welcome {props.userName}!</h2>
+      <Header userName={props.userName} />
       <InputBox onAdd={addNewToDoItem} reRender={getAllToDoItems} />
       <div className="list-container">
         {toDoItem.slice(startIndex, endIndex).map((listItem) => (
