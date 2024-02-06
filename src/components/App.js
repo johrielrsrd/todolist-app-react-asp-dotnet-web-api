@@ -38,7 +38,11 @@ function App(props) {
       headers: {
         "Content-Type": "application/json"
       },
-      body: JSON.stringify({ text: `${newToDoItem}`, isComplete: false })
+      body: JSON.stringify({
+        text: `${newToDoItem}`,
+        isComplete: false,
+        toDoItemId: props.userId
+      })
     };
 
     fetch("https://localhost:7010/api/ToDo", postOptions);
@@ -62,7 +66,8 @@ function App(props) {
       body: JSON.stringify({
         id: itemId,
         text: `${itemText}`,
-        isComplete: itemCondition
+        isComplete: itemCondition,
+        toDoItemId: props.userId
       })
     };
 
