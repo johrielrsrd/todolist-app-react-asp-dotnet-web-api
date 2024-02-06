@@ -31,7 +31,7 @@ function AppHandler() {
       {logInStatus === false ? (
         <LogInForm onLog={getUserAccount} />
       ) : (
-        <App data={userData} />
+        <App userName={userData.userName} userId={userData.id} />
       )}
     </div>
   );

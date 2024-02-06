@@ -19,12 +19,13 @@ function App(props) {
   useEffect(() => {
     getAllToDoItems();
     setTotalPages(Math.ceil(toDoItem.length / itemsPerPage));
+
     if (totalPages !== 0 && currentPage > totalPages)
       setCurrentPage(currentPage - 1);
   }, [currentPage, toDoItem.length, totalPages]);
 
   function getAllToDoItems() {
-    fetch("https://localhost:7010/api/ToDo").then((response) =>
+    fetch(`https://localhost:7010/api/ToDo/${props.userId}`).then((response) =>
       response.json().then((json) => {
         setToDoItem(json);
       })
@@ -43,7 +44,7 @@ function App(props) {
     fetch("https://localhost:7010/api/ToDo", postOptions);
   }
 
-  function deleteToDoItem(ToDoItemId) {
+  function deleteToDoItem(itemId) {
     const deleteOptions = {
       method: "DELETE",
       headers: {
@@ -51,7 +52,7 @@ function App(props) {
       }
     };
 
-    fetch(`https://localhost:7010/api/ToDo/${ToDoItemId}`, deleteOptions);
+    fetch(`https://localhost:7010/api/ToDo/${itemId}`, deleteOptions);
   }
 
   function updateToDoItem(itemId, itemText, itemCondition) {
@@ -71,6 +72,7 @@ function App(props) {
   return (
     <div className="app-container">
       <Header />
+      <h2>Welcome {props.userName}!</h2>
       <InputBox onAdd={addNewToDoItem} reRender={getAllToDoItems} />
       <div className="list-container">
         {toDoItem.slice(startIndex, endIndex).map((listItem) => (
@@ -84,6 +86,7 @@ function App(props) {
           />
         ))}
       </div>
+
       {/*Page Buttons*/}
       {toDoItem.length !== 0 ? (
         <div className="page-button-container">
