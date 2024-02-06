@@ -1,0 +1,12 @@
+.footer-container {
+  position: fixed;
+  bottom: 0px;
+  width: 100%;
+  text-align: center;
+}
+
+.footer-label {
+  display: inline-block;
+  text-align: center;
+  color: darkgrey;
+}

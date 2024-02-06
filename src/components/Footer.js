@@ -1,5 +1,11 @@
+import "../styles/Footer.css";
+
 function Footer() {
-  return <footer>John Johriel Rosarda</footer>;
+  return (
+    <footer className="footer-container">
+      <p className="footer-label">John Johriel Rosarda</p>
+    </footer>
+  );
 }
 
 export default Footer;
