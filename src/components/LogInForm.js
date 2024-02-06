@@ -1,20 +1,11 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../styles/LogInForm.css";
 
-function LogInForm() {
+function LogInForm(props) {
   const [inputField, setInputField] = useState({
     username: "",
     password: ""
   });
-
-  function getUserAccount(username, password) {
-    fetch(`https://localhost:7010/api/Users/${username}/${password}`).then(
-      (response) =>
-        response.json().then((json) => {
-          console.log(json);
-        })
-    );
-  }
 
   function handleChange(event) {
     const value = event.target.value;
@@ -38,7 +29,7 @@ function LogInForm() {
             username: "",
             password: ""
           });
-          getUserAccount(inputField.username, inputField.password);
+          props.onLog(inputField);
         }}
       >
         <input

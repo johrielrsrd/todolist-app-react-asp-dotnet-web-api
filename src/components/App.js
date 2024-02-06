@@ -5,7 +5,7 @@ import Header from "./Header";
 import InputBox from "./InputBox";
 import Footer from "./Footer";
 
-function App() {
+function App(props) {
   const [currentPage, setCurrentPage] = useState(1);
   const [toDoItem, setToDoItem] = useState([]);
 
