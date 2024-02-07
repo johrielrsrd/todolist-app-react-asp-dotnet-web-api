@@ -3,7 +3,7 @@ import "../styles/List.css";
 
 function List(props) {
   const [condition, setCondition] = useState(props.condition);
-  const [textValue, setTextValue] = useState(props.text);
+  const [textBoxValue, setTextBoxValue] = useState(props.text);
   const [isEditable, setEditable] = useState(false);
 
   function updateValue(condition) {
@@ -13,49 +13,80 @@ function List(props) {
 
   return (
     <div className="list-item-container">
-      <input
-        id="checkbox-input"
-        type="checkbox"
-        defaultChecked={condition}
-        onChange={() => {
-          props.onUpdate(
-            props.id,
-            props.text,
-            updateValue(condition),
-            props.userItemId
-          );
-          setCondition(updateValue(condition));
-        }}
-      />
-      <p
-        className="text-item"
-        style={{
-          textDecoration: condition ? "line-through" : "none",
-          border: isEditable ? "1px solid black" : "none",
-          padding: "5px"
-        }}
-        contentEditable={isEditable}
-        suppressContentEditableWarning={true}
-      >
-        {props.text}
-      </p>
-
-      <button onClick={() => setEditable(true)}>EDIT</button>
-      <button
-        className="delete-button"
-        onClick={() => {
-          props.onDelete(props.id);
-        }}
-      >
-        DELETE
-      </button>
-
-      {isEditable === true ? (
+      {!isEditable ? (
         <>
-          <button onClick={() => setEditable(false)}>X</button>
-          <button>OK</button>
+          <input
+            id="checkbox-input"
+            type="checkbox"
+            defaultChecked={condition}
+            onChange={() => {
+              props.onUpdate(
+                props.id,
+                props.text,
+                updateValue(condition),
+                props.userItemId
+              );
+              setCondition(updateValue(condition));
+            }}
+          />
+          <p
+            className="text-item"
+            style={{
+              textDecoration: condition ? "line-through" : "none"
+            }}
+          >
+            {props.text}
+          </p>
         </>
-      ) : null}
+      ) : (
+        <input
+          className="item-text-box"
+          type="text"
+          value={textBoxValue}
+          onChange={(event) => setTextBoxValue(event.target.value)}
+        />
+      )}
+
+      {!isEditable ? (
+        <>
+          <button onClick={() => setEditable(true)}>EDIT</button>
+          <button
+            className="delete-button"
+            onClick={() => {
+              props.onDelete(props.id);
+            }}
+          >
+            DELETE
+          </button>
+        </>
+      ) : (
+        <>
+          <button
+            className="x-button"
+            onClick={() => {
+              setEditable(false);
+              setTextBoxValue(props.text);
+            }}
+          >
+            X
+          </button>
+          <button
+            className="ok-button"
+            onClick={() => {
+              props.onUpdate(
+                props.id,
+                textBoxValue,
+                props.condition,
+                props.userItemId
+              );
+              setTextBoxValue(textBoxValue);
+              setEditable(false);
+            }}
+          >
+            OK
+          </button>
+        </>
+      )}
     </div>
   );
 }

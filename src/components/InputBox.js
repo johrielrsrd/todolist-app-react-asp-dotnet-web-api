@@ -1,12 +1,8 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import "../styles/InputBox.css";
 
 function InputBox(props) {
   const [newToDo, setToDo] = useState("");
-
-  // useEffect(() => {
-  //   props.reRender();
-  // }, [props]);
 
   return (
     <div className="input-box-container">
