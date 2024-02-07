@@ -18,16 +18,18 @@ function App(props) {
 
   useEffect(() => {
     getAllToDoItems();
-    setTotalPages(Math.ceil(toDoItem.length / itemsPerPage));
+  }, []);
 
+  useEffect(() => {
     if (totalPages !== 0 && currentPage > totalPages)
       setCurrentPage(currentPage - 1);
-  }, [currentPage, toDoItem.length, totalPages]);
+  }, [totalPages]);
 
   function getAllToDoItems() {
     fetch(`https://localhost:7010/api/ToDo/${props.userId}`).then((response) =>
       response.json().then((json) => {
         setToDoItem(json);
+        setTotalPages(Math.ceil(json.length / itemsPerPage));
       })
     );
   }
@@ -45,7 +47,9 @@ function App(props) {
       })
     };
 
-    fetch("https://localhost:7010/api/ToDo", postOptions);
+    fetch("https://localhost:7010/api/ToDo", postOptions).then(() =>
+      getAllToDoItems()
+    );
   }
 
   function deleteToDoItem(itemId) {
@@ -56,10 +60,12 @@ function App(props) {
       }
     };
 
-    fetch(`https://localhost:7010/api/ToDo/${itemId}`, deleteOptions);
+    fetch(`https://localhost:7010/api/ToDo/${itemId}`, deleteOptions).then(() =>
+      getAllToDoItems()
+    );
   }
 
-  function updateToDoItem(itemId, itemText, itemCondition) {
+  function updateToDoItem(itemId, itemText, itemCondition, userItemId) {
     const putOptions = {
       method: "PUT",
       headers: { "Content-Type": "application/json" },
@@ -67,11 +73,13 @@ function App(props) {
         id: itemId,
         text: `${itemText}`,
         isComplete: itemCondition,
-        toDoItemId: props.userId
+        toDoItemId: userItemId
       })
     };
 
-    fetch(`https://localhost:7010/api/ToDo/${itemId}`, putOptions);
+    fetch(`https://localhost:7010/api/ToDo/${itemId}`, putOptions).then(() =>
+      getAllToDoItems()
+    );
   }
 
   return (
@@ -85,6 +93,7 @@ function App(props) {
             id={listItem.id}
             text={listItem.text}
             condition={listItem.isComplete}
+            userItemId={listItem.toDoItemId}
             onDelete={deleteToDoItem}
             onUpdate={updateToDoItem}
           />
@@ -98,7 +107,7 @@ function App(props) {
             className="prev-button"
             onClick={() => {
               setCurrentPage(currentPage - 1);
-              getAllToDoItems();
+              // getAllToDoItems();
             }}
             disabled={currentPage <= 1 ? true : false}
           >
@@ -117,7 +126,7 @@ function App(props) {
             className="next-button"
             onClick={() => {
               setCurrentPage(currentPage + 1);
-              getAllToDoItems();
+              // getAllToDoItems();
             }}
             disabled={
               currentPage === totalPages || toDoItem.length === 0 ? true : false

@@ -4,9 +4,9 @@ import "../styles/InputBox.css";
 function InputBox(props) {
   const [newToDo, setToDo] = useState("");
 
-  useEffect(() => {
-    props.reRender();
-  }, [props]);
+  // useEffect(() => {
+  //   props.reRender();
+  // }, [props]);
 
   return (
     <div className="input-box-container">

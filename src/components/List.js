@@ -2,9 +2,11 @@ import { useState } from "react";
 import "../styles/List.css";
 
 function List(props) {
-  const [isChecked, setIsChecked] = useState(props.condition);
+  const [condition, setCondition] = useState(props.condition);
+  const [textValue, setTextValue] = useState(props.text);
+  const [isEditable, setEditable] = useState(false);
 
-  function swapCondition(condition) {
+  function updateValue(condition) {
     if (condition === false) return true;
     else return false;
   }
@@ -14,18 +16,31 @@ function List(props) {
       <input
         id="checkbox-input"
         type="checkbox"
-        defaultChecked={props.condition}
+        defaultChecked={condition}
         onChange={() => {
-          props.onUpdate(props.id, props.text, swapCondition(props.condition));
-          setIsChecked(swapCondition(props.condition));
+          props.onUpdate(
+            props.id,
+            props.text,
+            updateValue(condition),
+            props.userItemId
+          );
+          setCondition(updateValue(condition));
         }}
       />
       <p
         className="text-item"
-        style={{ textDecoration: isChecked ? "line-through" : "none" }}
+        style={{
+          textDecoration: condition ? "line-through" : "none",
+          border: isEditable ? "1px solid black" : "none",
+          padding: "5px"
+        }}
+        contentEditable={isEditable}
+        suppressContentEditableWarning={true}
       >
         {props.text}
       </p>
+
+      <button onClick={() => setEditable(true)}>EDIT</button>
       <button
         className="delete-button"
         onClick={() => {
@@ -34,6 +49,13 @@ function List(props) {
       >
         DELETE
       </button>
+
+      {isEditable === true ? (
+        <>
+          <button onClick={() => setEditable(false)}>X</button>
+          <button>OK</button>
+        </>
+      ) : null}
     </div>
   );
 }
